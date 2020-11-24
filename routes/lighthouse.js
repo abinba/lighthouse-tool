@@ -71,13 +71,13 @@ async function runLighthouseAnalysis(url) {
 router.use(bodyParser.json())
 router.use(bodyParser.urlencoded({extended: true}))
 
-router.get('/', (req, res) => {
+router.get('/lighthouse-node', (req, res) => {
    res.render('index', {
       title: 'Lighthouse Tool',
    });
 });
 
-router.post('/get-analysis', async (req, res) => {
+router.post('/lighthouse-node/get-analysis', async (req, res) => {
     let url = req.body.url;
     let reports = await runLighthouseAnalysis(url);
     res.render('index', {
