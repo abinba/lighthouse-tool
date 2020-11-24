@@ -20,6 +20,12 @@
       </div>
     </div>
     <div class="ready-report" style="margin-left: -100px;">
+        {{#if mobile}}
+            <a download class="lh-permalink" href="{{ mobile }}">Mobile Report</a><br>
+        {{/if}}
+        {{#if desktop}}
+            <a download class="lh-permalink" href="{{ desktop }}">Desktop Report</a>
+        {{/if}}
     </div>
   </form>
 </div>

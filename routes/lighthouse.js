@@ -18,8 +18,9 @@ function createFileName(optionSet, rand_num) {
   return `${rand_num}-${emulatedFormFactor}.${fileExtension}`;
 }
 
-function launchLighthouse(optionSet, opts, results, url, rand_num) {
-  return chromeLauncher
+async function launchLighthouse(optionSet, opts, results, url, rand_num) {
+  let filename = null;
+  await chromeLauncher
     .launch({ chromeFlags: opts.chromeFlags })
     .then(async chrome => {
       opts.port = chrome.port;
@@ -28,13 +29,15 @@ function launchLighthouse(optionSet, opts, results, url, rand_num) {
       } catch (e) {
         console.error("lighthouse", e);
       }
-      let filename = createFileName(optionSet, rand_num)
-      fs.writeFileSync(`${app_root_path}/reports/${filename}`, results.report[0], function (err) {
+      filename = createFileName(optionSet, rand_num)
+      let filepath = `${app_root_path}/static/reports/${filename}`;
+      fs.writeFileSync(filepath, results.report[0], function (err) {
         if (err) return console.log(err);
       });
       await wait(500);
       await chrome.kill();
     });
+  return filename;
 }
 
 async function runLighthouseAnalysis(url) {
@@ -55,12 +58,14 @@ async function runLighthouseAnalysis(url) {
     },
   ]
   let results;
+  let reports = [];
   const opts = {}
   for (const optionSet of lighthouseOptionsArray) {
     console.log("****** Starting Lighthouse analysis ******");
     let rand_num = Math.round(Math.random() * 100000);
-    await launchLighthouse(optionSet, opts, results, url, rand_num);
+    reports.push(await launchLighthouse(optionSet, opts, results, url, rand_num));
   }
+  return reports
 }
 
 router.use(bodyParser.json())
@@ -74,9 +79,12 @@ router.get('/', (req, res) => {
 
 router.post('/get-analysis', async (req, res) => {
     let url = req.body.url;
-    let analysis = await runLighthouseAnalysis(url);
-    console.log(analysis);
-    res.redirect('/');
+    let reports = await runLighthouseAnalysis(url);
+    res.render('index', {
+        title: 'Lighthouse Tool',
+        desktop: `/reports/${reports[0]}`,
+        mobile: `/reports/${reports[1]}`,
+    });
 });
 
 module.exports = router;
