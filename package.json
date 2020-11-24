@@ -1,0 +1,33 @@
+{
+  "name": "lighthouse-tool",
+  "version": "1.0.0",
+  "description": "Lighthouse Tool for getting Google Lighthouse Analysis",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abinba/lighthouse-tool.git"
+  },
+  "keywords": [
+    "lighthouse",
+    "google"
+  ],
+  "author": "abinba",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abinba/lighthouse-tool/issues"
+  },
+  "homepage": "https://github.com/abinba/lighthouse-tool#readme",
+  "dependencies": {
+    "app-root-path": "^3.0.0",
+    "body-parser": "^1.19.0",
+    "chrome-launcher": "^0.13.4",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.2.0",
+    "lighthouse": "^6.4.1",
+    "nodemon": "^2.0.6"
+  }
+}
